@@ -9,7 +9,7 @@ csv_dosya_yolu = "zararli_ip_raporu.csv"
 # Grafik stili
 plt.style.use('ggplot')
 
-print("1. Veriler Yükleniyor, lütfen bekleyin...")
+print("Veriler Yükleniyor, lütfen bekleyin...")
 
 try:
     df = pd.read_json(json_dosya_yolu, lines=True)
@@ -22,8 +22,7 @@ except FileNotFoundError:
     print(f"Hata: {json_dosya_yolu} bulunamadı. Dosya ismini kontrol et.")
     exit()
 
-# --- BÖLÜM 1: ÜLKE ANALİZİ ---
-print("2. Ülke Grafiği Hazırlanıyor...")
+# --- ÜLKE ANALİZİ ---
 
 if os.path.exists(csv_dosya_yolu):
     df_csv = pd.read_csv(csv_dosya_yolu)
@@ -51,8 +50,7 @@ else:
     print("UYARI: 'zararli_ip_raporu.csv' bulunamadı. Ülke grafiği atlanıyor.")
 
 
-# --- BÖLÜM 2: SAATLİK ANALİZ ---
-print("3. Saatlik Grafik Hazırlanıyor...")
+# --- SAATLİK ANALİZ ---
 df['hour'] = df['timestamp'].dt.hour
 hourly_counts = df['hour'].value_counts().sort_index()
 saat_etiketleri = [f"{i:02d}:00" for i in range(24)]
@@ -68,8 +66,7 @@ plt.tight_layout()
 plt.show()
 
 
-# --- BÖLÜM 3: KULLANICI ADI & ŞİFRE ---
-print("4. Kimlik Bilgileri Grafiği Hazırlanıyor...")
+# --- KULLANICI ADI & ŞİFRE ---
 girisler = df[df['eventid'] == 'cowrie.login.failed']
 
 if not girisler.empty:
@@ -90,8 +87,7 @@ if not girisler.empty:
     plt.show()
 
 
-# --- BÖLÜM 4: KOMUT ANALİZİ  ---
-print("5. Komut Analizi Hazırlanıyor...")
+# --- KOMUT ANALİZİ  ---
 
 if 'input' in df.columns:
     komutlar = df[df['eventid'] == 'cowrie.command.input']['input']
@@ -118,8 +114,7 @@ if 'input' in df.columns:
         print("Komut verisi bulunamadı.")
 
 
-# --- BÖLÜM 5: SSH VERSİYON  ---
-print("6. SSH Tool Analizi Hazırlanıyor...")
+# ---  SSH VERSİYON  ---
 
 if 'version' in df.columns:
     versiyonlar = df[df['eventid'] == 'cowrie.client.version']['version']
@@ -150,10 +145,8 @@ if 'version' in df.columns:
     plt.show()
 
 
-# --- BÖLÜM 6: OTURUM SÜRESİ ANALİZİ  ---
-print("7. Oturum Süresi Analizi Hesaplanıyor...")
+# ---  OTURUM SÜRESİ ANALİZİ  ---
 
-# Oturum ID'sine göre gruplayıp (Bitiş - Başlangıç) farkını alıyoruz
 session_groups = df.groupby('session')['timestamp']
 start_times = session_groups.min()
 end_times = session_groups.max()
@@ -178,8 +171,7 @@ if not durations.empty:
     print(f"-> En Uzun Oturum: {durations.max():.2f} saniye")
 
 
-# --- BÖLÜM 7: ŞİFRELEME ALGORİTMALARI ---
-print("8. Kriptografik Yetenek Analizi Hazırlanıyor...")
+# ---  ŞİFRELEME ALGORİTMALARI ---
 
 if 'kexAlgs' in df.columns:
     kex_data = df[df['eventid'] == 'cowrie.client.kex']['kexAlgs'].explode()
