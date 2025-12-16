@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 
 # --- AYARLAR ---
-json_dosya_yolu = "cowrie_data.json" 
+json_dosya_yolu = "cowrie_data_sample.json" 
 csv_dosya_yolu = "zararli_ip_raporu.csv"
 
 # Grafik stili
